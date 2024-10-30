@@ -24,6 +24,14 @@
                         <label for="date" class="form-label">Date</label>
                         {{ form.date(class="form-control", type="date") }}
                     </div>
+                    <div class="mb-3 form-check">
+                        {{ form.recurring(class="form-check-input") }}
+                        <label class="form-check-label" for="recurring">Recurring Expense</label>
+                    </div>
+                    <div class="mb-3" id="frequencyField" style="display: none;">
+                        <label for="frequency" class="form-label">Frequency</label>
+                        {{ form.frequency(class="form-control") }}
+                    </div>
                     <button type="submit" class="btn btn-primary">Add Expense</button>
                 </form>
             </div>
@@ -42,6 +50,8 @@
                                 <th>Category</th>
                                 <th>Description</th>
                                 <th>Amount</th>
+                                <th>Type</th>
+                                <th>Frequency</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,6 +61,8 @@
                                 <td>{{ expense.category.name }}</td>
                                 <td>{{ expense.description }}</td>
                                 <td>${{ "%.2f"|format(expense.amount) }}</td>
+                                <td>{{ "Recurring" if expense.recurring else "One-time" }}</td>
+                                <td>{{ expense.frequency.title() if expense.recurring else "-" }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -60,4 +72,21 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const recurringCheckbox = document.querySelector('#recurring');
+    const frequencyField = document.querySelector('#frequencyField');
+    
+    function toggleFrequencyField() {
+        frequencyField.style.display = recurringCheckbox.checked ? 'block' : 'none';
+    }
+    
+    recurringCheckbox.addEventListener('change', toggleFrequencyField);
+    toggleFrequencyField();
+});
+</script>
 {% endblock %}

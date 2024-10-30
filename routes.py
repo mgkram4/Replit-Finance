@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db
 from models import User, Expense, Category, SavingsGoal, Income
 from forms import LoginForm, RegisterForm, ExpenseForm, SavingsGoalForm, IncomeForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import func
 
 # Initialize categories
@@ -19,6 +19,40 @@ def init_categories():
 # Initialize categories when the app starts
 with app.app_context():
     init_categories()
+
+def process_recurring_expenses():
+    """Process all recurring expenses and create new entries if needed"""
+    current_date = datetime.utcnow()
+    recurring_expenses = Expense.query.filter_by(recurring=True).all()
+    
+    for expense in recurring_expenses:
+        if not expense.last_recurring_date:
+            expense.last_recurring_date = expense.date
+            continue
+            
+        next_date = None
+        if expense.frequency == 'monthly':
+            next_date = expense.last_recurring_date + timedelta(days=30)
+        elif expense.frequency == 'weekly':
+            next_date = expense.last_recurring_date + timedelta(days=7)
+        elif expense.frequency == 'yearly':
+            next_date = expense.last_recurring_date + timedelta(days=365)
+            
+        if next_date and next_date <= current_date:
+            new_expense = Expense(
+                amount=expense.amount,
+                description=expense.description,
+                category_id=expense.category_id,
+                user_id=expense.user_id,
+                recurring=True,
+                frequency=expense.frequency,
+                date=next_date,
+                last_recurring_date=next_date
+            )
+            expense.last_recurring_date = next_date
+            db.session.add(new_expense)
+    
+    db.session.commit()
 
 def calculate_savings_recommendations(user_id):
     # Get monthly income
@@ -83,6 +117,7 @@ def calculate_savings_recommendations(user_id):
 @app.route('/dashboard')
 @login_required
 def dashboard():
+    process_recurring_expenses()  # Process recurring expenses before showing dashboard
     expenses = Expense.query.filter_by(user_id=current_user.id).all()
     goals = SavingsGoal.query.filter_by(user_id=current_user.id).all()
     savings_recommendations = calculate_savings_recommendations(current_user.id)
@@ -148,6 +183,7 @@ def logout():
 @app.route('/expenses', methods=['GET', 'POST'])
 @login_required
 def expenses():
+    process_recurring_expenses()  # Process recurring expenses before showing the page
     form = ExpenseForm()
     form.category.choices = [(c.id, c.name) for c in Category.query.all()]
     
@@ -157,7 +193,10 @@ def expenses():
             description=form.description.data,
             category_id=form.category.data,
             date=form.date.data,
-            user_id=current_user.id
+            user_id=current_user.id,
+            recurring=form.recurring.data,
+            frequency=form.frequency.data if form.recurring.data else 'monthly',
+            last_recurring_date=form.date.data if form.recurring.data else None
         )
         db.session.add(expense)
         db.session.commit()

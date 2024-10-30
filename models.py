@@ -43,6 +43,9 @@ class Expense(db.Model):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recurring = db.Column(db.Boolean, default=False)
+    frequency = db.Column(db.String(20), default='monthly')  # monthly, weekly, yearly
+    last_recurring_date = db.Column(db.DateTime)
 
 class SavingsGoal(db.Model):
     id = db.Column(db.Integer, primary_key=True)

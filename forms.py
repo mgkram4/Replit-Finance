@@ -28,6 +28,12 @@ class ExpenseForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     category = SelectField('Category', coerce=int, validators=[DataRequired()])
     date = DateField('Date', validators=[DataRequired()])
+    recurring = BooleanField('Recurring Expense')
+    frequency = SelectField('Frequency', choices=[
+        ('monthly', 'Monthly'),
+        ('weekly', 'Weekly'),
+        ('yearly', 'Yearly')
+    ], default='monthly')
 
 class SavingsGoalForm(FlaskForm):
     name = StringField('Goal Name', validators=[DataRequired()])
