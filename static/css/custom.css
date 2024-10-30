@@ -1,31 +1,153 @@
+/* General styles */
+:root {
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+}
+
+/* Card styling */
+.card {
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: var(--bs-primary);
+}
+
+/* Form styling */
+.form-control {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all var(--transition-speed);
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-info-rgb), 0.25);
+  border-color: var(--bs-info);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  transition: all var(--transition-speed);
+}
+
+.btn-primary {
+  background-color: var(--bs-info);
+  border-color: var(--bs-info);
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-info-dark);
+  border-color: var(--bs-info-dark);
+  transform: translateY(-1px);
+}
+
+/* Progress bar styling */
 .progress {
-    height: 25px;
-    margin-bottom: 10px;
-    background-color: var(--bs-dark);
+  height: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  margin: 1rem 0;
+  overflow: hidden;
 }
 
 .progress-bar {
-    background-color: var(--bs-info);
-    color: white;
-    text-align: center;
-    line-height: 25px;
-    font-size: 0.9em;
+  background-color: var(--bs-info);
+  transition: width 1s ease-in-out;
 }
 
-.card {
-    border-color: var(--bs-border-color);
-    background-color: var(--bs-dark);
-}
-
+/* Table styling */
 .table {
-    margin-bottom: 0;
+  margin: 1rem 0;
 }
 
+.table th {
+  font-weight: 600;
+  border-top: none;
+}
+
+.table td, .table th {
+  padding: 1rem;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* List group styling */
+.list-group-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all var(--transition-speed);
+}
+
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Navigation styling */
 .navbar {
-    margin-bottom: 2rem;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
 }
 
+.nav-link {
+  transition: color var(--transition-speed);
+  padding: 0.5rem 1rem;
+  margin: 0 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Form container */
 .form-container {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card, .alert {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Chart styling */
+canvas {
+  max-width: 100%;
+  margin: 1rem 0;
+  border-radius: 0.5rem;
 }
