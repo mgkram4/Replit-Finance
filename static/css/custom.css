@@ -1,0 +1,31 @@
+.progress {
+    height: 25px;
+    margin-bottom: 10px;
+    background-color: var(--bs-dark);
+}
+
+.progress-bar {
+    background-color: var(--bs-info);
+    color: white;
+    text-align: center;
+    line-height: 25px;
+    font-size: 0.9em;
+}
+
+.card {
+    border-color: var(--bs-border-color);
+    background-color: var(--bs-dark);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.navbar {
+    margin-bottom: 2rem;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
