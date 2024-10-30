@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, FloatField, DateField, SelectField, TextAreaField
+from wtforms import StringField, PasswordField, FloatField, DateField, SelectField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 class LoginForm(FlaskForm):
@@ -11,6 +11,17 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+
+class IncomeForm(FlaskForm):
+    amount = FloatField('Amount', validators=[DataRequired()])
+    source = StringField('Source', validators=[DataRequired()])
+    date = DateField('Date', validators=[DataRequired()])
+    recurring = BooleanField('Recurring Income')
+    frequency = SelectField('Frequency', choices=[
+        ('monthly', 'Monthly'),
+        ('weekly', 'Weekly'),
+        ('yearly', 'Yearly')
+    ], default='monthly')
 
 class ExpenseForm(FlaskForm):
     amount = FloatField('Amount', validators=[DataRequired()])

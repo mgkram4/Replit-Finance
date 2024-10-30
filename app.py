@@ -23,7 +23,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 with app.app_context():
-    from models import User, Expense, Category, SavingsGoal
+    from models import User, Expense, Category, SavingsGoal, Income
     db.create_all()
 
 from routes import *

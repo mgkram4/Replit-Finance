@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256))
     expenses = db.relationship('Expense', backref='user', lazy=True)
     goals = db.relationship('SavingsGoal', backref='user', lazy=True)
+    incomes = db.relationship('Income', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -25,6 +26,15 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     expenses = db.relationship('Expense', backref='category', lazy=True)
+
+class Income(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float, nullable=False)
+    source = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    recurring = db.Column(db.Boolean, default=False)
+    frequency = db.Column(db.String(20), default='monthly')  # monthly, weekly, yearly
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
